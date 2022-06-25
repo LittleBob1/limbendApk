@@ -8,7 +8,10 @@ using System.Collections;
 public class test : MonoBehaviour
 {
     public Tilemap myTileMap;
-    public GameObject MainCameraBorder;
+
+    public TMP_Text TextLoading;
+    public GameObject CanvasLoading;
+    public GameObject player;
 
     public int size;
 
@@ -21,32 +24,35 @@ public class test : MonoBehaviour
     public float lacunarS;
 
     public List<Tile> myTiles = new List<Tile>();
-    public List<Color> myColors = new List<Color>();
+    private int[,] tiles;
 
     private void Start()
     {
-        MainCameraBorder.transform.position = new Vector3(size / 2, size / 2, 0);
-        MainCameraBorder.transform.localScale = new Vector3(size, size, 1);
-
         StartCoroutine(CreateVoronoi());
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            CreateVoronoi();
-        }
+       
     }
 
     IEnumerator CreateVoronoi()
     {
+
+        TextLoading.text = "Preparation...";
+
         Vector2[] points = new Vector2[regionAmount];
+
+        tiles = new int[size, size];
 
         for (int i = 0; i < regionAmount; i++)
         {
             points[i] = new Vector2(Random.Range(0, size), Random.Range(0, size));
         }
+
+        int af = 2 + 7 * Random.Range(1, regionAmount / 7);
+
+        player.transform.position = new Vector2(points[af].x, points[af].y);
 
         for (int x = 0; x < size; x++)
         {
@@ -84,53 +90,88 @@ public class test : MonoBehaviour
                 {
                     if (perlinValue < 0.5f)
                     {
-                        myTileMap.SetTile(new Vector3Int(x, y, 0), myTiles[value % regionTileAmount]);
+                        tiles[x, y] = value % regionTileAmount;
                     }
 
                     else
                     {
-                        myTileMap.SetTile(new Vector3Int(x, y, 0), myTiles[closesRegionIndex % regionTileAmount]);
+                        tiles[x, y] = closesRegionIndex % regionTileAmount;
                     }
                 }
                 else
                 {
-                    myTileMap.SetTile(new Vector3Int(x, y, 0), myTiles[value % regionTileAmount]);
+                    tiles[x, y] = value % regionTileAmount;
                 }
             }
-            yield return null;
+            if (x % 2 == 0)
+            {
+                yield return null;
+                float a = x;
+                TextLoading.text = "Generation... " + Mathf.RoundToInt(a / size * 100f) + "%";
+            }
         }
 
-
+        
         for (int i = 0; i < regionAmount; i++)
         {
+        
             for (int amount = 1; amount <= 2; amount++)
             {
                 for (int y = amount; y < size - amount; y++)
                 {
                     for (int x = amount; x < size - amount; x++)
                     {
-                        if (myTileMap.GetTile(new Vector3Int(x + amount, y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) && myTileMap.GetTile(new Vector3Int(x - amount, y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) || myTileMap.GetTile(new Vector3Int(x, amount + y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) && myTileMap.GetTile(new Vector3Int(x, y - amount, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)))
+                        
+                        if(tiles[x + amount, y] != tiles[x, y] && tiles[x - amount, y] != tiles[x, y] || tiles[x, y + amount] != tiles[x, y] && tiles[x, y - amount] != tiles[x, y])
                         {
-                            myTileMap.SetTile(new Vector3Int(x, y, 0), myTileMap.GetTile(new Vector3Int(x + amount, y, 0)));
+                            tiles[x, y] = tiles[x + amount, y];
                         }
+                        
                     }
                 }
             }
+            
+            yield return null;
+            float a = i;
+            TextLoading.text = "Cleaning... " + Mathf.RoundToInt(a / regionAmount * 100f) + "%";
         }
+        
 
         for (int y = 1; y < size - 1; y++)
         {
             for (int x = 1; x < size - 1; x++)
             {
-                if (myTileMap.GetTile(new Vector3Int(x + 1, y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) && myTileMap.GetTile(new Vector3Int(x - 1, y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) && myTileMap.GetTile(new Vector3Int(x, 1 + y, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)) && myTileMap.GetTile(new Vector3Int(x, y - 1, 0)) != myTileMap.GetTile(new Vector3Int(x, y, 0)))
+                
+                if (tiles[x + 1, y] != tiles[x, y] && tiles[x - 1, y] != tiles[x, y] && tiles[x, y + 1] != tiles[x, y] && tiles[x, y - 1] != tiles[x, y])
                 {
-                    myTileMap.SetTile(new Vector3Int(x, y, 0), myTileMap.GetTile(new Vector3Int(x + 1, y, 0)));
+                    tiles[x, y] = tiles[x + 1, y];
                 }
+
             }
+            yield return null;
+            float a = y;
+            TextLoading.text = "Completion of generation... " + Mathf.RoundToInt(a / size * 100f) + "%";
         }
 
+        
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+               myTileMap.SetTile(new Vector3Int(x,y,0), myTiles[tiles[x, y]]);
+            }
+            if (x % 10 == 0)
+            {
+                yield return null;
+                float a = x;
+                TextLoading.text = "Create a map... " + Mathf.RoundToInt(a / size * 100f) + "%";
+            }
+        
+        }
+        
         CameraControl cont = GameObject.Find("MiniMapCamera").GetComponent<CameraControl>();
         cont.startPaint();
+        Destroy(CanvasLoading);
     }
     
 

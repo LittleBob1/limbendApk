@@ -10,6 +10,8 @@ public class CameraControl : MonoBehaviour
     public GameObject player;
 
     public GameObject CanvasPlayer;
+    public GameObject CanvasMiniMap;
+    public Camera MainCamera;
 
     private Vector2 minX;
     private Vector2 maxY;
@@ -24,6 +26,7 @@ public class CameraControl : MonoBehaviour
     void Start()
     {
         Test = GameObject.Find("simulation").GetComponent<test>();
+
         size = Test.size;
 
         cam = GetComponent<Camera>();
@@ -33,14 +36,15 @@ public class CameraControl : MonoBehaviour
         myTexture.Apply();
         map.GetComponent<Renderer>().material.mainTexture = myTexture;
 
-        map.transform.position = new Vector3(size / 2 - 10000, size / 2, 0);
+        map.transform.position = new Vector3(size / 2 - 10000, size / 2, 100);
         map.transform.localScale = new Vector3(size, size, 1);
 
         MapTexture = new Dictionary<string, Color>
         {
-            {"end", Color.white},
+            {"end", new Color(0, 173f / 255f, 166f / 255f)},
             {"evil", new Color(136f / 255f, 9f / 255f, 27f / 255f)},
             {"green", Color.green},
+            {"g", Color.green},
             {"magic", new Color(184f / 255f, 61f / 255f, 186f / 255f)},
             {"neutral", Color.grey},
             {"sand", new Color(0, 52f / 255f, 0)},
@@ -61,13 +65,30 @@ public class CameraControl : MonoBehaviour
 
     void Update()
     {
+
+        if (InMap == false)
+        {
+            MiniMapTransform();
+            MainCameraTransform();
+        }
+        else
+        {
+
+        }
+    }
+
+    private void MainCameraTransform()
+    {
+        MainCamera.transform.position = new Vector3(player.transform.position.x, player.transform.position.y, -10);
+        MainCamera.transform.position = new Vector3(Mathf.Clamp(MainCamera.transform.position.x, MainCamera.transform.position.x - MainCamera.ViewportToWorldPoint(new Vector2(0, 0)).x, size - (MainCamera.transform.position.x - MainCamera.ViewportToWorldPoint(new Vector2(0, 0)).x)), Mathf.Clamp(MainCamera.transform.position.y, MainCamera.transform.position.y - MainCamera.ViewportToWorldPoint(new Vector2(0, 0)).y, size - (MainCamera.transform.position.y - MainCamera.ViewportToWorldPoint(new Vector2(0, 0)).y)), -10);
+    }
+
+    private void MiniMapTransform()
+    {
         follow.transform.position = new Vector3(player.transform.position.x - 10000, player.transform.position.y, 0);
         transform.position = new Vector3(follow.transform.position.x, follow.transform.position.y, -10);
-
         Borders();
-
         float border = size - ((maxY.y - minX.y) / 2) - 10000;
-
         transform.position = new Vector3(Mathf.Clamp(follow.transform.position.x, (maxY.y - minX.y) / 2 - 10000, border), Mathf.Clamp(follow.transform.position.y, (maxY.y - minX.y) / 2, size - ((maxY.y - minX.y) / 2)), -10);
     }
 
@@ -91,7 +112,7 @@ public class CameraControl : MonoBehaviour
         {
              for(int y = Y; y < mxY; y++)
              {
-                if (x >= 0 && x <= size && y >= 0 && y <= size && myTexture.GetPixel(x, y) == new Color32(0, 0, 0, 0))
+                if (x >= 0 && x < size && y >= 0 && y < size && myTexture.GetPixel(x, y) == new Color32(0, 0, 0, 0))
                 {
                     tile = Test.GetTile(new Vector3Int(x, y, 0));
                     myTexture.SetPixel(x, y, MapTexture[tile.name]);
@@ -109,9 +130,24 @@ public class CameraControl : MonoBehaviour
          maxY = cam.ViewportToWorldPoint(new Vector2(0, 1)); // top-right corner
     }
 
+    private bool InMap = false;
+
     public void ButtonOpenMap()
     {
+        InMap = true;
         CanvasPlayer.SetActive(false);
+        CanvasMiniMap.SetActive(true);
+        MainCamera.transform.position = new Vector3(follow.transform.position.x, follow.transform.position.y, -10);
+        MainCamera.orthographicSize = 100;
+        MainCamera.GetComponent<ZoomCamera>().enabled = true;
+    }
 
+    public void ButtonCloseMap()
+    {
+        InMap = false;
+        CanvasPlayer.SetActive(true);
+        CanvasMiniMap.SetActive(false);
+        MainCamera.orthographicSize = 8;
+        MainCamera.GetComponent<ZoomCamera>().enabled = false;
     }
 }
