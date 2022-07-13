@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7c50b78442f6f9c47856aaac4d35c9cc
+guid: 56f2da6fb4d81414580f1719f88608b4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -71,7 +71,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -142,211 +142,106 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: forest_trees_0
+      name: _up idle_0
       rect:
         serializedVersion: 2
-        x: 6
-        y: 1
-        width: 75
-        height: 167
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 25
+        y: 78
+        width: 14
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 33d7b7446a17ad144b39bbbdcc274d75
-      internalID: 1627298169
+      spriteID: 7dc217e477a6b454a8f52d1ff7185596
+      internalID: 336653521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest_trees_2
+      name: _up idle_1
       rect:
         serializedVersion: 2
-        x: 102
-        y: 0
-        width: 80
-        height: 173
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 89
+        y: 78
+        width: 14
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fc5324f3bab6a354982e34f7fb11ae1d
-      internalID: -1099587278
+      spriteID: 5b5f6126cc2a6d64583fb9604ca1e66e
+      internalID: -1607192728
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest_trees_3
+      name: _up idle_2
       rect:
         serializedVersion: 2
-        x: 207
-        y: 2
-        width: 62
-        height: 164
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 153
+        y: 78
+        width: 14
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 057b98b8cf37aca4b8626cc2856dbbeb
-      internalID: -1583688237
+      spriteID: 8e75f105f626f6340bdcea606acbb219
+      internalID: -325182487
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest_trees_4
+      name: _up idle_3
       rect:
         serializedVersion: 2
-        x: 307
-        y: 1
-        width: 66
-        height: 171
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 217
+        y: 78
+        width: 14
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 801fd16d74633c9479ed40736e43ab1b
-      internalID: 429350914
+      spriteID: 130aa55e7e6194c46990a1b4d37e268c
+      internalID: -230264631
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: forest_trees_6
+      name: _up idle_4
       rect:
         serializedVersion: 2
-        x: 400
-        y: 2
-        width: 75
-        height: 163
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        x: 25
+        y: 14
+        width: 14
+        height: 33
+      alignment: 9
+      pivot: {x: 0.5, y: 0.1}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 16b5f2fa20d9d5f45a9a6f5cc67222e0
-      internalID: 1405677474
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest_trees_7
-      rect:
-        serializedVersion: 2
-        x: 494
-        y: 2
-        width: 76
-        height: 165
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e9cc7d80f6d39434eb7f54457bd3f5d9
-      internalID: 145147736
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest_trees_8
-      rect:
-        serializedVersion: 2
-        x: 593
-        y: 1
-        width: 73
-        height: 179
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2436a5e0eb561d644aa2f26ec95abd22
-      internalID: -294292244
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest_trees_9
-      rect:
-        serializedVersion: 2
-        x: 673
-        y: 2
-        width: 91
-        height: 197
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7bdca8b02e2bae04fb4c900537bd7a3d
-      internalID: -1074201263
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest_trees_10
-      rect:
-        serializedVersion: 2
-        x: 780
-        y: 1
-        width: 81
-        height: 182
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 459f67dce0beefc46b35aeaaa2c28930
-      internalID: 41124046
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: forest_trees_13
-      rect:
-        serializedVersion: 2
-        x: 858
-        y: 12
-        width: 6
-        height: 6
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1d0bc7828210a514bb3646f084f3192e
-      internalID: -1371076278
+      spriteID: d4b3fbefc6b250b468b910668469ec63
+      internalID: -1544610989
       vertices: []
       indices: 
       edges: []
@@ -362,20 +257,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      forest_trees_8: -294292244
-      forest_trees_5: -689157180
-      forest_trees_4: 429350914
-      forest_trees_10: 41124046
-      forest_trees_2: -1099587278
-      forest_trees_3: -1583688237
-      forest_trees_9: -1074201263
-      forest_trees_1: 790252364
-      forest_trees_12: 1463735190
-      forest_trees_7: 145147736
-      forest_trees_11: 288558096
-      forest_trees_13: -1371076278
-      forest_trees_6: 1405677474
-      forest_trees_0: 1627298169
+      _up idle_3: -230264631
+      _up idle_4: -1544610989
+      _up idle_2: -325182487
+      _up idle_1: -1607192728
+      _up idle_5: 68256559
+      _up idle_0: 336653521
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

@@ -14,13 +14,14 @@ public class sortLayer : MonoBehaviour
         sp = GetComponent<SpriteRenderer>();
         if (isStatic)
         {
-            rd.sortingOrder = Mathf.RoundToInt((transform.position.y - rd.bounds.extents.y) * 100f) * -1;
+            // rd.sortingOrder = Mathf.RoundToInt((transform.position.y - rd.bounds.extents.y) * -1);
+            rd.sortingOrder = Mathf.RoundToInt(transform.position.y * -1);
             Destroy(this);
         }
     }
 
     private void LateUpdate()
     {
-        rd.sortingOrder = Mathf.RoundToInt((transform.position.y - rd.bounds.extents.y) * 100f) * -1;
+        rd.sortingOrder = Mathf.RoundToInt(transform.position.y * -1);
     }
 }

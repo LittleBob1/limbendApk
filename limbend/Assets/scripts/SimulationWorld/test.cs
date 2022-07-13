@@ -13,6 +13,8 @@ public class test : MonoBehaviour
     public GameObject CanvasLoading;
     public GameObject player;
 
+    public List<GameObject> trees = new List<GameObject>();
+
     public int size;
 
     public int regionAmount;
@@ -24,7 +26,7 @@ public class test : MonoBehaviour
     public float lacunarS;
 
     public List<Tile> myTiles = new List<Tile>();
-    private int[,] tiles;
+    public int[,] tiles;
 
     private void Start()
     {
@@ -74,6 +76,7 @@ public class test : MonoBehaviour
 
                 int closesRegionIndex = 0;
                 float distanceRegion = float.MaxValue;
+
                 for (int i = 0; i < regionAmount; i++)
                 {
                     if (i != value)
@@ -153,7 +156,39 @@ public class test : MonoBehaviour
             TextLoading.text = "Completion of generation... " + Mathf.RoundToInt(a / size * 100f) + "%";
         }
 
-        
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                if (tiles[x, y] == 2)
+                {
+                    int a = Random.Range(1, 11);
+                    if (a == 1)
+                    {
+                        tiles[x, y] = Random.Range(7, 20);
+                    }
+                }
+            }
+        }
+
+        for (int x = 0; x < size; x++)
+        {
+            for (int y = 0; y < size; y++)
+            {
+                if (tiles[x, y] == 2)
+                {
+                    int f = Random.Range(0, 150);
+                    if (f == 1)
+                    {
+                        int a = Random.Range(0, 9);
+                        GameObject g = Instantiate(trees[a], new Vector3(x, y, 0), Quaternion.identity);
+                        g.transform.localScale = new Vector3(Random.Range(8f, 12f), Random.Range(8f, 12f), 0);
+                    }
+                }
+            }
+        }
+
+        /*
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -168,8 +203,9 @@ public class test : MonoBehaviour
             }
         
         }
-        
+        */
         CameraControl cont = GameObject.Find("MiniMapCamera").GetComponent<CameraControl>();
+        cont.StartChunks();
         cont.startPaint();
         Destroy(CanvasLoading);
     }
@@ -202,10 +238,11 @@ public class test : MonoBehaviour
         }
     }
 
+    
     public TileBase GetTile(Vector3Int pos)
     {
         TileBase tile = myTileMap.GetTile(pos);
         return tile;
     }
-
+    
 }
