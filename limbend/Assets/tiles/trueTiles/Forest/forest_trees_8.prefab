@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 5777352606337007160}
   - component: {fileID: 1354112339220764104}
   - component: {fileID: 4544689568398559217}
-  m_Layer: 0
+  - component: {fileID: -1659489765014537260}
+  m_Layer: 6
   m_Name: forest_trees_8
-  m_TagString: Untagged
+  m_TagString: tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5777352606337007160
 SpriteRenderer:
@@ -111,7 +112,19 @@ MonoBehaviour:
   m_GameObject: {fileID: 2153329024949573744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5de7b84a635fd541a93489c5b6df3b3, type: 3}
+  m_Script: {fileID: 11500000, guid: c56525865115d9d4fa47d688947312e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isStatic: 1
+--- !u!114 &-1659489765014537260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2153329024949573744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64e767b9920635e4bb15698bce4d695d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

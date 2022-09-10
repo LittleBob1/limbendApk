@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System;
 
 public class CameraControl : MonoBehaviour
 {
@@ -21,7 +22,6 @@ public class CameraControl : MonoBehaviour
 
     private Camera cam;
     private test Test;
-    private Texture2D myTexture;
     private Dictionary<string, Color> MapTexture;
 
     private int[,] tiles;
@@ -29,16 +29,41 @@ public class CameraControl : MonoBehaviour
 
     void Start()
     {
+        test.StartCamFunc += StartChunks;
+        test.StartCamFunc += StartPaint;
+        try
+        {
+            MenuController g = GameObject.Find("MenuContoller").GetComponent<MenuController>();
+
+            if (g.WorldSize == 0)
+            {
+                size = 300;
+            }
+            else if (g.WorldSize == 1)
+            {
+                size = 600;
+            }
+            else if (g.WorldSize == 2)
+            {
+                size = 1000;
+            }
+            else if (g.WorldSize == 3)
+            {
+                size = 5000;
+            }
+        }
+        catch
+        {
+            size = 300;
+        }
+        CreateMiniMap();
+    }
+
+    public void CreateMiniMap()
+    {
         Test = GameObject.Find("simulation").GetComponent<test>();
 
-        size = Test.size;
-
         cam = GetComponent<Camera>();
-
-        myTexture = new Texture2D(size, size);
-        myTexture.filterMode = FilterMode.Point;
-        myTexture.Apply();
-        map.GetComponent<Renderer>().material.mainTexture = myTexture;
 
         map.transform.position = new Vector3(size / 2 - 10000, size / 2, 100);
         map.transform.localScale = new Vector3(size, size, 1);
@@ -68,18 +93,8 @@ public class CameraControl : MonoBehaviour
             {"forest74", new Color(127f / 255f, 145f / 255f, 69f / 255f)},
             {"forest75", new Color(127f / 255f, 145f / 255f, 69f / 255f)},
             {"forest76", new Color(127f / 255f, 145f / 255f, 69f / 255f)},
+            {"GreenYel", new Color(127f / 255f, 145f / 255f, 69f / 255f)},
         };
-
-        for (int x = 0; x < size; x++)
-        {
-
-            for (int y = 0; y < size; y++)
-            {
-                myTexture.SetPixel(x, y, new Color32(0, 0, 0, 0));
-
-            }
-        }
-        myTexture.Apply();
     }
 
     void Update()
@@ -111,7 +126,7 @@ public class CameraControl : MonoBehaviour
         transform.position = new Vector3(Mathf.Clamp(follow.transform.position.x, (maxY.y - minX.y) / 2 - 10000, border), Mathf.Clamp(follow.transform.position.y, (maxY.y - minX.y) / 2, size - ((maxY.y - minX.y) / 2)), -10);
     }
 
-    public void startPaint()
+    public void StartPaint()
     {
         StartCoroutine(PaintTexture());
     }
@@ -123,14 +138,19 @@ public class CameraControl : MonoBehaviour
         StartCoroutine(Chunk());
     }
 
+    public void StopCoroutines()
+    {
+        StopAllCoroutines();
+    }
+
     IEnumerator Chunk()
     {
         yield return new WaitForSeconds(0.1f);
 
-        int maxX = Mathf.RoundToInt(player.transform.position.x) + 30;
-        int mxY = Mathf.RoundToInt(player.transform.position.y) + 30;
-        int X = Mathf.RoundToInt(player.transform.position.x) - 30;
-        int Y = Mathf.RoundToInt(player.transform.position.y) - 30;
+        int maxX = Mathf.RoundToInt(player.transform.position.x) + 35;
+        int mxY = Mathf.RoundToInt(player.transform.position.y) + 35;
+        int X = Mathf.RoundToInt(player.transform.position.x) - 35;
+        int Y = Mathf.RoundToInt(player.transform.position.y) - 35;
 
         for (int x = X; x < maxX; x++)
         {
@@ -143,7 +163,6 @@ public class CameraControl : MonoBehaviour
 
             }
         }
-
         StartCoroutine(Chunk());
     }
 
@@ -156,20 +175,17 @@ public class CameraControl : MonoBehaviour
         int mxY = Mathf.RoundToInt(player.transform.position.y) + 14;
         int X = Mathf.RoundToInt(player.transform.position.x) - 14;
         int Y = Mathf.RoundToInt(player.transform.position.y) - 14;
-        TileBase tile;
 
         for (int x = X; x < maxX; x++)
         {
              for(int y = Y; y < mxY; y++)
              {
-                if (x >= 0 && x < size && y >= 0 && y < size && myTexture.GetPixel(x, y) == new Color32(0, 0, 0, 0))
+                if (x >= 0 && x < size && y >= 0 && y < size && MyTileMap.GetTile(new Vector3Int(x - 10000, y, 0)) == null)
                 {
-                    tile = MyTileMap.GetTile(new Vector3Int(x, y, 0));
-                    myTexture.SetPixel(x, y, MapTexture[tile.name]);
+                    MyTileMap.SetTile(new Vector3Int(x-10000, y, 0), myTiles[tiles[x, y]]);
                 }
              }
         }
-        myTexture.Apply();
         StartCoroutine(PaintTexture());
     }
 
@@ -179,7 +195,7 @@ public class CameraControl : MonoBehaviour
          maxY = cam.ViewportToWorldPoint(new Vector2(0, 1)); // top-right corner
     }
 
-    private bool InMap = false;
+    public bool InMap = false;
 
     public void ButtonOpenMap()
     {

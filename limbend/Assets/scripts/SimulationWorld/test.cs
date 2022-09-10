@@ -4,6 +4,8 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.Tilemaps;
 using System.Collections;
+using System;
+using Random = UnityEngine.Random;
 
 public class test : MonoBehaviour
 {
@@ -28,14 +30,51 @@ public class test : MonoBehaviour
     public List<Tile> myTiles = new List<Tile>();
     public int[,] tiles;
 
+    public static Action StartCamFunc;
+    public static Action StartGetBiomPlayer;
+
     private void Start()
     {
+        FindValueSize();
         StartCoroutine(CreateVoronoi());
     }
 
     private void Update()
     {
        
+    }
+
+    private void FindValueSize()
+    {
+        try
+        {
+            MenuController g = GameObject.Find("MenuContoller").GetComponent<MenuController>();
+
+            if (g.WorldSize == 0)
+            {
+                size = 300;
+                scaleS = 13;
+                regionAmount = 40;
+            }
+            else if (g.WorldSize == 1)
+            {
+                size = 600;
+            }
+            else if (g.WorldSize == 2)
+            {
+                size = 1000;
+            }
+            else if (g.WorldSize == 3)
+            {
+                size = 5000;
+            }
+        }
+        catch
+        {
+            size = 300;
+            scaleS = 13;
+            regionAmount = 40;
+        }
     }
 
     IEnumerator CreateVoronoi()
@@ -133,12 +172,16 @@ public class test : MonoBehaviour
                     }
                 }
             }
-            
-            yield return null;
-            float a = i;
-            TextLoading.text = "Cleaning... " + Mathf.RoundToInt(a / regionAmount * 100f) + "%";
+
+            if (i % 2 == 0)
+            {
+                yield return null;
+                float a = i;
+                TextLoading.text = "Cleaning... " + Mathf.RoundToInt(a / regionAmount * 100f) + "%";
+            }
         }
-        
+
+        TextLoading.text = "Completion of generation...";
 
         for (int y = 1; y < size - 1; y++)
         {
@@ -151,11 +194,11 @@ public class test : MonoBehaviour
                 }
 
             }
-            yield return null;
-            float a = y;
-            TextLoading.text = "Completion of generation... " + Mathf.RoundToInt(a / size * 100f) + "%";
+            //yield return null;
+            //float a = y;
+            //TextLoading.text = "Completion of generation... " + Mathf.RoundToInt(a / size * 100f) + "%";
         }
-
+        
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -165,12 +208,12 @@ public class test : MonoBehaviour
                     int a = Random.Range(1, 11);
                     if (a == 1)
                     {
-                        tiles[x, y] = Random.Range(7, 20);
+                        tiles[x, y] = Random.Range(7, 21);
                     }
                 }
             }
         }
-
+        
         for (int x = 0; x < size; x++)
         {
             for (int y = 0; y < size; y++)
@@ -204,9 +247,26 @@ public class test : MonoBehaviour
         
         }
         */
-        CameraControl cont = GameObject.Find("MiniMapCamera").GetComponent<CameraControl>();
-        cont.StartChunks();
-        cont.startPaint();
+        StartCamFunc?.Invoke();
+        StartGetBiomPlayer?.Invoke();
+
+        int maxX = Mathf.RoundToInt(player.transform.position.x) + 30;
+        int mxY = Mathf.RoundToInt(player.transform.position.y) + 30;
+        int X = Mathf.RoundToInt(player.transform.position.x) - 30;
+        int Y = Mathf.RoundToInt(player.transform.position.y) - 30;
+
+        for (int x = X; x < maxX; x++)
+        {
+            for (int y = Y; y < mxY; y++)
+            {
+                if (x >= 0 && x < size && y >= 0 && y < size && GetTile(new Vector3Int(x, y, 0)) == null)
+                {
+                    myTileMap.SetTile(new Vector3Int(x, y, 0), myTiles[tiles[x, y]]);
+                }
+
+            }
+        }
+
         Destroy(CanvasLoading);
     }
     
