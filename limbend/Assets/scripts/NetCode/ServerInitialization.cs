@@ -21,8 +21,6 @@ namespace ServerCommands {
         private NetworkStream ns = null;
         string msg;
 
-        StreamWriter theWriter = null;
-
         public void StartListening(int port)
         {
             clients = new List<TcpClient>();
@@ -45,7 +43,7 @@ namespace ServerCommands {
             }
         }
 
-        public void UpdateListening()
+        private void UpdateListening()
         {
             if (listener != null)
             {
@@ -55,22 +53,30 @@ namespace ServerCommands {
                     clients.Add(client);
                     TextConsole.text += "\n" + client.Client.RemoteEndPoint + " connected";
                 }
-               
-                try
+            }
+        }
+
+        private void ReceivingMsgs()
+        {
+            try
+            {
+                if (clients != null && TextConsole != null)
                 {
                     for (int i = 0; i < clients.Count; i++)
                     {
                         ns = clients[i].GetStream();
+
                         if (ns != null && ns.DataAvailable)
                         {
                             BinaryReader reader = new BinaryReader(ns);
-                            msg = reader.ReadString(); 
+                            msg = reader.ReadString();
                             TextConsole.text += "\n" + msg;
 
                             for (int j = 0; j < clients.Count; j++)
                             {
                                 if (clients[i] != clients[j])
                                 {
+                                    ns = clients[j].GetStream();
                                     BinaryWriter writer = new BinaryWriter(ns);
                                     writer.Write(msg);
                                     writer.Flush();
@@ -79,17 +85,43 @@ namespace ServerCommands {
                         }
                     }
                 }
-                catch(Exception e)
-                {
-                    TextConsole.text += "\n" + e;
-                }
+            }
+            catch (Exception e)
+            {
+                TextConsole.text += "\n" + e;
+            }
+        }
 
+        private void CleanShutDownClients()
+        {
+            for(int i = 0; i < clients.Count; i++)
+            {
+                //if(clients[i].)
+            }
+        }
+
+        public void SendMsg(string msg)
+        {
+            try
+            {
+                for (int j = 0; j < clients.Count; j++)
+                {
+                    ns = clients[j].GetStream();
+                    BinaryWriter writer = new BinaryWriter(ns);
+                    writer.Write(msg);
+                    writer.Flush();
+                }
+            }
+            catch (Exception e)
+            {
+                TextConsole.text += "\nError: " + e;
             }
         }
 
         void Update()
         {
             UpdateListening();
+            ReceivingMsgs();
         }
 
         private void OnApplicationQuit()

@@ -82,6 +82,8 @@ public class CommandHandler : MonoBehaviour
         else if (commands[0] == "host")
         {
             ServerInitialization s = GameObject.Find("ServerInit").GetComponent<ServerInitialization>();
+            GameObject.Find("ServerInit").GetComponent<ClientInit>().enabled = false;
+
             try
             {
                 ConsoleText.text = "\n" + ConsoleText.text + "\n" + Input.text + "\n";
@@ -96,9 +98,19 @@ public class CommandHandler : MonoBehaviour
         else if (commands[0] == "send")
         {
             ClientInit s = GameObject.Find("ServerInit").GetComponent<ClientInit>();
+            if (s.enabled == true)
+            {
                 ConsoleText.text = "\n" + ConsoleText.text + "\n" + Input.text + "\n";
                 s.SendMsgFromClient(commands[1]);
-            Input.text = null;
+                Input.text = null;
+            }
+            else
+            {
+                ServerInitialization serv = GameObject.Find("ServerInit").GetComponent<ServerInitialization>();
+                ConsoleText.text = "\n" + ConsoleText.text + "\n" + Input.text + "\n";
+                serv.SendMsg(commands[1]);
+                Input.text = null;
+            }
         }
         else if (commands[0] == "connect")
         {

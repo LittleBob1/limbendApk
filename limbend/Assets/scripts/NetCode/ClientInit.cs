@@ -12,9 +12,7 @@ public class ClientInit : MonoBehaviour
 {
     TMP_Text TextConsole;
     NetworkStream theStream = null;
-    StreamWriter theWriter = null;
     TcpClient mySocket = null;
-    //TcpClient server = null;
     private string msg;
 
     IPAddress Host;
@@ -68,7 +66,7 @@ public class ClientInit : MonoBehaviour
             if (mySocket.Connected)
             {
                 theStream = mySocket.GetStream();
-                if (theStream.DataAvailable)
+                if (theStream != null && theStream.DataAvailable)
                 {
                     BinaryReader reader = new BinaryReader(theStream);
                     msg = reader.ReadString();
